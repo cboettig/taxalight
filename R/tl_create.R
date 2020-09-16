@@ -18,6 +18,11 @@ lmdb_create <- function(provider = getOption("taxadb_default_provider", "itis"),
   
 }
 
+## Our basic strategy is to write the rows & columns that match
+## into a single text string with "\t" delimiters for columns and 
+## "\n" delimiters for rows, allowing the character vector to
+## easily be transformed back into a table
+
 
 lmdb_importer <- function(df, db){
   
@@ -32,6 +37,8 @@ lmdb_importer <- function(df, db){
   ## collapse groups  with `\n`.  base R, bitches
   tmp <- with(df2, tapply(value, key, paste, collapse="\n"))
   db$mput(key = names(tmp), value = tmp)
+  
+  ## key on vernacular name?
   
   invisible(db)
 }

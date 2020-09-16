@@ -16,13 +16,15 @@ LazyData: true
 ByteCompile: true
 Depends: R (>= 2.10)
 Imports:
-    thor
+    thor,
+    contentid
 Suggests:
     spelling,
     testthat,
     covr,
     knitr,
-    rmarkdown
+    rmarkdown,
+    progress
 URL: https://github.com/cboettig/taxalight
 BugReports: https://github.com/cboettig/taxalight
 Language: en-US
