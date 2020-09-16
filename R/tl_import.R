@@ -1,10 +1,9 @@
 
 
-
 #' @importFrom contentid resolve
-tl_import <- function(provider = getOption("taxadb_default_provider", "itis"),
+tl_import <- function(provider = getOption("tl_default_provider", "itis"),
                       schema = c("dwc", "common"),
-                      version = latest_version()){
+                      version = tl_latest_version()){
   
   ## For unit tests / examples only
   if(provider == "itis_test")
@@ -53,7 +52,7 @@ parse_prov <- function(url =  "https://raw.githubusercontent.com/boettiger-lab/t
 }
 
 
-latest_version <- function(){
+tl_latest_version <- function(){
   prov <- parse_prov() 
   max(prov$version)
 }

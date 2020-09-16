@@ -1,4 +1,6 @@
 
+## Adapted from arkdb
+
 process_chunks <- function(file, 
                            process_fn,
                            lines = 5e5L, 
@@ -77,11 +79,11 @@ compressed_file <- function(path, ...){
 }
 
 
-progress <- function(txt){
+progress <- function(txt, clear = FALSE, width = 80){
   
   if (requireNamespace("progress", quietly = TRUE)){
     progress_bar <- getExportedValue("progress", "progress_bar")
-    p <- progress_bar$new(txt)
+    p <- progress_bar$new(txt, clear = clear, width = width)
   } else {
     ## dummy progress bar if we don't have progress installed
     p <- function(){ list(tick = function()  invisible(NULL)) }

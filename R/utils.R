@@ -1,6 +1,7 @@
 
 
 ## Adapted from `rappdirs`, MIT license (c) Hadley Wickham, RStudio
+
 user_data_dir <- function (appname = NULL, appauthor = appname, version = NULL, 
           roaming = FALSE, expand = TRUE, os = get_os()) 
 {

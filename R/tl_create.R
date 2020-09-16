@@ -1,9 +1,21 @@
 
 
-
+#' Create a Lightning Memory-Mapped Database (LMDB) for a given provider
+#' 
+#' Download raw data and store in a local LMDB database.  Importing
+#' data is a time-consuming step that needs be run only once per
+#' machine and will persist through sessions.
 #' @inheritParams tl
-tl_create <- function(provider = getOption("taxadb_default_provider", "itis"),
-                      version = latest_version(),
+#' @inheritSection details tl
+#' @export
+#' @examples
+#' 
+#' ## example uses "itis_test" for illustration only:
+#' tl_create("itis_test")
+#' 
+#' 
+tl_create <- function(provider = getOption("tl_default_provider", "itis"),
+                      version = tl_latest_version(),
                       dir =  tl_dir(),
                       ...){
   
@@ -16,6 +28,8 @@ tl_create <- function(provider = getOption("taxadb_default_provider", "itis"),
   lapply(paths,
          process_chunks,
          lambda)
+  
+  invisible(db)
   
 }
 
@@ -48,8 +62,8 @@ lmdb_importer <- function(df, db){
 }
 
 
-lmdb_path <- function(provider =  getOption("taxadb_default_provider", "itis"),
-                      version = latest_version(),
+lmdb_path <- function(provider =  getOption("tl_default_provider", "itis"),
+                      version = tl_latest_version(),
                       dir = tl_dir() ){
   file.path(dir, provider, version)
 }
