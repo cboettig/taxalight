@@ -1,0 +1,54 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# taxalight :zap: :zap:
+
+<!-- badges: start -->
+[![R build status](https://github.com/cboettig/taxalight/workflows/R-CMD-check/badge.svg)](https://github.com/cboettig/taxalight/actions)
+<!-- badges: end -->
+
+`taxalight` provides a lightweight, lightning fast query for resolving taxonomic identifiers to taxonomic names, and vice versa, by using a Lightning Memory Mapped Database backend.
+
+
+## Installation
+
+You can install the released version of taxalight from [CRAN](https://CRAN.R-project.org) with:
+
+``` r
+install.packages("taxalight")
+```
+
+And the development version from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("cboettig/taxalight")
+```
+
+## Example
+
+`taxalight` needs to first download and import the provider naming databases.  This can take a while, but needs to only be done once.
+
+```{r example}
+library(taxalight)
+tl_create("itis")
+```
+
+Now we can look up species by names, IDs, or both at once:
+
+```{r}
+tl("Homo sapiens")
+```
+

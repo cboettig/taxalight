@@ -20,7 +20,7 @@
 #'  - `itis_test`: a small subset of ITIS, cached locally for testing purposes only.
 #'  
 #' The default provider is `itis`, which can be reconfigured by setting
-#' `tl_default_provider` in `[options]`
+#' `tl_default_provider` in `[options]`.
 #' 
 #' @return a data.frame in Darwin Core format with rows matching the 
 #' acceptedNameUsageID or scientificName requested.  

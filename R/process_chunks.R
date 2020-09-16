@@ -3,7 +3,7 @@
 
 process_chunks <- function(file, 
                            process_fn,
-                           lines = 5e5L, 
+                           lines = 1e5L, 
                            encoding = "UTF-8",
                            ...){
   
@@ -15,9 +15,10 @@ process_chunks <- function(file,
     return(NULL)
   }
   reader <- read_chunked(con, lines, encoding)
-  # May throw an error if we need to read more than 'total' chunks?
-  p <- progress("Importing [:bar] :percent eta: :eta")
-  t0 <- Sys.time()
+  
+  #p <- progress("Importing to LMDB [:bar] elapsed: :elapsed, eta: :eta", total = total)
+  p <- progress("(:spin) Importing chunk :current to LMDB... elapsed: :elapsed", total = NA)
+  
   repeat {
     d <- reader()
     body <- paste0(c(header, d$data), "\n", collapse = "")
@@ -28,7 +29,6 @@ process_chunks <- function(file,
       break
     }
   }
-  message(sprintf("\t...Done! (in %s)", format(Sys.time() - t0)))
 }
 
 
@@ -48,6 +48,7 @@ read_chunked <- function(con, n, encoding) {
 }
 
 
+
 stream_table <- function(file, 
                          sep = "\t", 
                          quote = "", 
@@ -64,26 +65,23 @@ stream_table <- function(file,
 }
 
 
-file_ext <- function(x) {
-  pos <- regexpr("\\.([[:alnum:]]+)$", x)
-  ifelse(pos > -1L, substring(x, pos + 1L), "")
+## This is ~~rather desperate~~ terribly innacurate
+estimate_chunks <- function(file, lines, encoding="UTF-8"){
+  total <- file.size(file)
+  x <- readLines(
+    file, lines, encoding = encoding, warn = FALSE)
+  tmp <- tempfile()
+  writeLines(x, gzfile(tmp))
+  ceiling(total / file.size(tmp))
 }
 
-compressed_file <- function(path, ...){
-  con <- switch(file_ext(path),
-                gz = gzfile(path, ...),
-                bz2 = bzfile(path, ...),
-                xz = xzfile(path, ...),
-                zip = unz(path, ...),
-                file(path, ...))
-}
-
-
-progress <- function(txt, clear = FALSE, width = 80){
+## We can compute the file-size but not the chunk size.
+## So we don't know how many chunks we will need.
+progress <- function(txt, clear = FALSE, width = 80, total=NA){
   
   if (requireNamespace("progress", quietly = TRUE)){
     progress_bar <- getExportedValue("progress", "progress_bar")
-    p <- progress_bar$new(txt, clear = clear, width = width)
+    p <- progress_bar$new(txt, clear = clear, width = width, total = total)
   } else {
     ## dummy progress bar if we don't have progress installed
     p <- function(){ list(tick = function()  invisible(NULL)) }

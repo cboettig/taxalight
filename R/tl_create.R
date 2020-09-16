@@ -17,7 +17,7 @@
 tl_create <- function(provider = getOption("tl_default_provider", "itis"),
                       version = tl_latest_version(),
                       dir =  tl_dir(),
-                      ...){
+                      lines = 5e5L){
   
   schema <- "dwc" ## importer does not handle common names table yet
   db <- lmdb_init(lmdb_path(provider, version, dir))
@@ -27,7 +27,8 @@ tl_create <- function(provider = getOption("tl_default_provider", "itis"),
   
   lapply(paths,
          process_chunks,
-         lambda)
+         lambda,
+         lines = lines)
   
   invisible(db)
   
