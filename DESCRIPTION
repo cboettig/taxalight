@@ -1,0 +1,31 @@
+Package: taxalight
+Version: 0.1.0
+Title: A Lightweight and Lightning-fast taxonomic naming interface
+Description: Creates a local Lightning Memory Backed Database (LMDB) 
+             of many commonly used taxonomic authorities
+             and provides functions that can quickly query this data.
+Authors@R: c(
+            person("Carl", "Boettiger", , "cboettig@gmail.com", c("aut", "cre"),
+                   comment = c(ORCID = "0000-0002-1642-628X")),
+            person("Kari", "Norman", role= "aut",
+                   comment = c(ORCID = "0000-0002-2029-2325"))
+            )
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+ByteCompile: true
+Depends: R (>= 2.10)
+Imports:
+    thor
+Suggests:
+    spelling,
+    testthat,
+    covr,
+    knitr,
+    rmarkdown
+URL: https://github.com/cboettig/taxalight
+BugReports: https://github.com/cboettig/taxalight
+Language: en-US
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+VignetteBuilder: knitr
