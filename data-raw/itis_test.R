@@ -1,0 +1,7 @@
+library(dplyr)
+itis_file <- contentid::resolve("hash://sha256/ef6ae3b337be65c661d5e2d847613ebc955bb9d91d2d98d03cf8c53029cecc2a")
+itis <- vroom::vroom(itis_file)
+sp <- c("Dendrocygna autumnalis", "Dendrocygna bicolor")
+id <- c("ITIS:180092", "ITIS:179913")
+its_test <- dplyr::filter(itis, scientificName %in% sp | acceptedNameUsageID %in% id)
+vroom::vroom_write(itis_test, "inst/extdata/itis_test.tsv.gz")

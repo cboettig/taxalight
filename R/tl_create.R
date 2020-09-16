@@ -1,10 +1,10 @@
 
 
 
-
+#' @inheritParams tl
 tl_create <- function(provider = getOption("taxadb_default_provider", "itis"),
                       version = latest_version(),
-                      dir =  taxalight_dir(),
+                      dir =  tl_dir(),
                       ...){
   
   schema <- "dwc" ## importer does not handle common names table yet
@@ -27,20 +27,20 @@ tl_create <- function(provider = getOption("taxadb_default_provider", "itis"),
 
 lmdb_importer <- function(df, db){
 
-  ## Enforce standard column ordering and choice!
+  ## Enforce standard column selection & order
   df1 <- df[dwc_columns()]
     
   ## collapse columns with `\t`.  Is there a faster way?
-  df2 <-  data.frame(key = df1$scientificName, 
-                     value = do.call(function(...) paste(..., sep="\t"), df1))
-  
-  ## Write taxonID key (assumes taxonID is unique)
-  db$mput(key = df$taxonID, value = df2$value)
-  
-  ## Write scientificName key, does not assume unique
+  txt = do.call(function(...) paste(..., sep="\t"), df1)
+
+  ## Write acceptedNameUsageID key (may not be unique due to synonyms)
   ## collapse groups  with `\n`.  base R, bitches
-  tmp <- with(df2, tapply(value, key, paste, collapse="\n"))
-  db$mput(key = names(tmp), value = tmp)
+  ids <- tapply(txt, df1$acceptedNameUsageID, paste, collapse="\n")
+  db$mput(key = names(ids), value = ids)
+  
+  ## Now write scientificName as the key.
+  sci <- tapply(txt, df1$scientificName, paste, collapse="\n")
+  db$mput(key = names(sci), value = sci)
   
   ## key on vernacular name?
   
@@ -50,11 +50,11 @@ lmdb_importer <- function(df, db){
 
 lmdb_path <- function(provider =  getOption("taxadb_default_provider", "itis"),
                       version = latest_version(),
-                      dir = taxalight_dir() ){
+                      dir = tl_dir() ){
   file.path(dir, provider, version)
 }
 
-taxalight_dir <- function() {
+tl_dir <- function() {
   user_data_dir("taxalight") 
 }
 

@@ -1,8 +1,14 @@
 
+
+
 #' @importFrom contentid resolve
 tl_import <- function(provider = getOption("taxadb_default_provider", "itis"),
                       schema = c("dwc", "common"),
                       version = latest_version()){
+  
+  ## For unit tests / examples only
+  if(provider == "itis_test")
+    return(system.file("extdata", "itis_test.tsv.gz", package = "taxalight"))
   
   
   keys <- unlist(lapply(schema, paste, provider, version, sep="-"))
@@ -26,6 +32,9 @@ tl_import <- function(provider = getOption("taxadb_default_provider", "itis"),
 
 
 ## data-raw me?
+## export me? 
+
+#' @importFrom jsonlite read_json toJSON fromJSON
 parse_prov <- function(url =  "https://raw.githubusercontent.com/boettiger-lab/taxadb-cache/master/prov.json"){
   prov <- jsonlite::read_json(url)
   graph <- jsonlite::toJSON(prov$`@graph`, auto_unbox = TRUE)
