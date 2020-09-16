@@ -46,3 +46,8 @@ get_os <- function () {
     stop("Unknown OS")
   }
 }
+
+file_path <- function (...) 
+{
+  normalizePath(do.call("file.path", as.list(c(...))), mustWork = FALSE)
+}

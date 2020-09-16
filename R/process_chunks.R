@@ -1,11 +1,11 @@
 
 process_chunks <- function(file, 
                            process_fn,
-                           lines = 5e4L, 
+                           lines = 5e5L, 
                            encoding = "UTF-8",
                            ...){
   
-  con <- compressed_file(file, "rb", encoding = encoding)
+  con <- file(file)
   on.exit(close(con))
   
   header <- readLines(con, n = 1L, encoding = encoding, warn = FALSE)
@@ -32,7 +32,6 @@ process_chunks <- function(file,
 
 # Adapted from @richfitz, MIT licensed
 read_chunked <- function(con, n, encoding) {
-  assert_connection(con)
   next_chunk <- readLines(con, n, encoding = encoding, warn = FALSE)
   if (length(next_chunk) == 0L) {
     warning("connection has already been completely read")
@@ -78,11 +77,11 @@ compressed_file <- function(path, ...){
 }
 
 
-progress <- function(txt, total = 100000){
+progress <- function(txt){
   
   if (requireNamespace("progress", quietly = TRUE)){
     progress_bar <- getExportedValue("progress", "progress_bar")
-    p <- progress_bar$new("[:spin] chunk :current", total = 100000)
+    p <- progress_bar$new(txt)
   } else {
     ## dummy progress bar if we don't have progress installed
     p <- function(){ list(tick = function()  invisible(NULL)) }

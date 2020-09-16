@@ -2,11 +2,12 @@
 
 
 
-lmdb_create <- function(provider = getOption("taxadb_default_provider", "itis"),
-                        version = latest_version(),
-                        dir =  taxalight_dir(),
-                        ...){
+tl_create <- function(provider = getOption("taxadb_default_provider", "itis"),
+                      version = latest_version(),
+                      dir =  taxalight_dir(),
+                      ...){
   
+  schema <- "dwc" ## importer does not handle common names table yet
   db <- lmdb_init(lmdb_path(provider, version, dir))
   lambda <- function(chunk) lmdb_importer(chunk, db)
   
@@ -25,10 +26,13 @@ lmdb_create <- function(provider = getOption("taxadb_default_provider", "itis"),
 
 
 lmdb_importer <- function(df, db){
-  
-  ## collapse columns with `\t`
-  df2 <-  data.frame(key = df$scientificName, 
-                     value = do.call(function(...) paste(..., sep="\t"), df))
+
+  ## Enforce standard column ordering and choice!
+  df1 <- df[dwc_columns()]
+    
+  ## collapse columns with `\t`.  Is there a faster way?
+  df2 <-  data.frame(key = df1$scientificName, 
+                     value = do.call(function(...) paste(..., sep="\t"), df1))
   
   ## Write taxonID key (assumes taxonID is unique)
   db$mput(key = df$taxonID, value = df2$value)
@@ -50,4 +54,13 @@ lmdb_path <- function(provider =  getOption("taxadb_default_provider", "itis"),
   file.path(dir, provider, version)
 }
 
-taxalight_dir <- function() user_data_dir("taxalight")
+taxalight_dir <- function() {
+  user_data_dir("taxalight") 
+}
+
+dwc_columns <- function() {
+  c("taxonID", "scientificName", "acceptedNameUsageID",
+    "taxonomicStatus", "taxonRank", "kingdom", "phylum",
+    "class", "order", "family", "genus", "specificEpithet",
+    "infraspecificEpithet", "vernacularName")
+}

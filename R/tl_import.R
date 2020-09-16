@@ -1,6 +1,6 @@
 
 #' @importFrom contentid resolve
-td_import <- function(provider = getOption("taxadb_default_provider", "itis"),
+tl_import <- function(provider = getOption("taxadb_default_provider", "itis"),
                       schema = c("dwc", "common"),
                       version = latest_version()){
   
@@ -13,19 +13,15 @@ td_import <- function(provider = getOption("taxadb_default_provider", "itis"),
   
   ids <- as.character(na.omit(dict[keys]))
   
+  ## This will resolve the content-based identifier for the data to an appropriate source,
+  ## validate that the data matches the checksum given in the identifier, 
+  ## and cache a local copy.  If the a local copy already matches the checksum,
+  ## this will avoid downloading at all
   paths <- vapply(ids, contentid::resolve, "", store=TRUE)
-  tsv_gz_ext(paths)
+  paths
 }
 
 
-
-tsv_gz_ext <- function(paths){
-  vapply(paths,
-         function(x){
-           file.rename(x, paste0(x, ".tsv.gz"))
-           paste0(x, ".tsv.gz")
-         }, "")
-}
 
 
 
@@ -48,3 +44,7 @@ parse_prov <- function(url =  "https://raw.githubusercontent.com/boettiger-lab/t
 }
 
 
+latest_version <- function(){
+  prov <- parse_prov() 
+  max(prov$version)
+}
