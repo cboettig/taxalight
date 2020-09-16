@@ -3,5 +3,6 @@ itis_file <- contentid::resolve("hash://sha256/ef6ae3b337be65c661d5e2d847613ebc9
 itis <- vroom::vroom(itis_file)
 sp <- c("Dendrocygna autumnalis", "Dendrocygna bicolor")
 id <- c("ITIS:180092", "ITIS:179913")
-its_test <- dplyr::filter(itis, scientificName %in% sp | acceptedNameUsageID %in% id)
+itis_test <- dplyr::filter(itis, scientificName %in% sp | acceptedNameUsageID %in% id)
+dir.create("inst/extdata", FALSE, TRUE)
 vroom::vroom_write(itis_test, "inst/extdata/itis_test.tsv.gz")
