@@ -1,9 +1,11 @@
+
+#' @importFrom thor mdb_env
 lmdb_init <- function(path) {
-  if (!requireNamespace("thor", quietly = TRUE)){
-    stop("Please install package `thor` to use LMDB backend")
-  }
-  mdb_env <- getExportedValue("thor", "mdb_env")
-  mdb_env(path, mapsize = 1e12) ## ~1 TB
+  #if (!requireNamespace("thor", quietly = TRUE)){
+  #  stop("Please install package `thor` to use LMDB backend")
+  #}
+  #mdb_env <- getExportedValue("thor", "mdb_env")
+  thor::mdb_env(path, mapsize = mapsize()) ## ~1 TB
 }
 
 
@@ -19,4 +21,12 @@ lmdb_parse <- function(x, col.names, colClasses = NA){
              header = FALSE, sep = "\t",
              quote = "",  colClasses = colClasses,
              col.names = col.names)
+}
+
+## Windows throws errors on larger maps?
+mapsize <- function(){
+  if (.Platform$OS.type == "windows") {
+    return(1e9)
+  }
+  1e12
 }
