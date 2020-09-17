@@ -29,6 +29,7 @@ process_chunks <- function(file,
       break
     }
   }
+  message("\n")
 }
 
 
