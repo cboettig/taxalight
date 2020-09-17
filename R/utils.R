@@ -1,54 +1,39 @@
 
 
-## Adapted from `rappdirs`, MIT license (c) Hadley Wickham, RStudio
+first_8_bytes <- function(x) readBin(x, n = 8, what = "raw")
 
-user_data_dir <- function (appname = NULL, appauthor = appname, version = NULL, 
-          roaming = FALSE, expand = TRUE, os = get_os()) 
-{
-  if (expand) 
-    version <- expand_r_libs_specifiers(version)
-  if (is.null(appname) && !is.null(version)) {
-    version <- NULL
-    warning("version is ignored when appname is null")
-  }
-  switch(os, win = file_path(win_path(ifelse(roaming, "roaming", 
-                                             "local")), appauthor, appname, version), 
-         mac = file_path("~/Library/Application Support", 
-                         appname, version), 
-         unix = file_path(Sys.getenv("XDG_DATA_HOME", 
-                                                                                                                                                     "~/.local/share"), appname, version))
+compression_signature <- function(x){
+  
+  # https://en.wikipedia.org/wiki/List_of_file_signatures
+  gz_sig <- as.raw(c("0x1F", "0x8B"))
+  bz2_sig <- as.raw(paste0("0x", c("42", "5A", "68")))
+  xz_sig <- as.raw(paste0("0x", c("FD", "37", "7A", "58", "5A", "00")))
+  
+  sig <- first_8_bytes(x)  
+  
+  if(identical(gz_sig, sig[1:2]))
+    return("gzip")
+  if(identical(bz2_sig, sig[1:3]))
+    return("bz2")
+  if(identical(xz_sig, sig[1:6]))
+    return("xz")
+  ""
+  
 }
 
-expand_r_libs_specifiers <- function (version_path){
-  if (is.null(version_path)) 
-    return(NULL)
-  rversion <- getRversion()
-  version_path <- gsub_special("%V", rversion, version_path)
-  version_path <- gsub_special("%v", paste(rversion$major, 
-                                           rversion$minor, sep = "."), version_path)
-  version_path <- gsub_special("%p", R.version$platform, version_path)
-  version_path <- gsub_special("%o", R.version$os, version_path)
-  version_path <- gsub_special("%a", R.version$arch, version_path)
-  version_path <- gsub("%%", "%", version_path)
-  version_path
+
+generic_connection <- function(path, ...) {
+  
+    con <- switch(compression_signature(path),
+                  gzip = gzfile(path, ...),
+                  bz2 = bzfile(path, ...),
+                  xz = xzfile(path, ...),
+                  zip = unz(path, ...),
+                  file(path, ...))
+    
 }
 
-get_os <- function () {
-  if (.Platform$OS.type == "windows") {
-    "win"
-  }
-  else if (Sys.info()["sysname"] == "Darwin") {
-    "mac"
-  }
-  else if (.Platform$OS.type == "unix") {
-    "unix"
-  }
-  else {
-    stop("Unknown OS")
-  }
-}
 
-file_path <- function (...) 
-{
-  normalizePath(do.call("file.path", as.list(c(...))), mustWork = FALSE)
-}
+
+
+

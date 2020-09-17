@@ -6,7 +6,7 @@
 #' data is a time-consuming step that needs be run only once per
 #' machine and will persist through sessions.
 #' @inheritParams tl
-#' @inheritSection details tl
+#' @inherit tl details
 #' @export
 #' @examples
 #' 

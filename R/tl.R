@@ -39,9 +39,9 @@ tl <- function(x,
                dir = tl_dir()){
 
   path <- lmdb_path(provider, version, dir)
-  
-  ## either assert path exists or call tl_create?
-  
+  if(!file.exists(path))
+    tl_import(provider = provider, schema = "dwc", version = version)
+
   db <- lmdb_init(path)
   
   ## dbs may not all use same columns in same order. enforce!

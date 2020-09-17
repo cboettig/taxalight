@@ -19,6 +19,7 @@ Imports:
     thor,
     contentid
 Suggests:
+    jsonlite,
     spelling,
     testthat,
     covr,

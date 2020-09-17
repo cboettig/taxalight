@@ -26,6 +26,21 @@ Download raw data and store in a local LMDB database.  Importing
 data is a time-consuming step that needs be run only once per
 machine and will persist through sessions.
 }
+\details{
+Naming providers currently recognized by taxald are:
+\itemize{
+\item \code{itis}: Integrated Taxonomic Information System, \url{https://www.itis.gov/}
+\item \code{ncbi}:  National Center for Biotechnology Information,
+\url{https://www.ncbi.nlm.nih.gov/taxonomy}
+\item \code{col}: Catalogue of Life, \url{http://www.catalogueoflife.org/}
+\item \code{gbif}: Global Biodiversity Information Facility, \url{https://www.gbif.org/}
+\item \code{ott}: OpenTree Taxonomy: \url{https://github.com/OpenTreeOfLife/reference-taxonomy}
+\item \code{itis_test}: a small subset of ITIS, cached locally for testing purposes only.
+}
+
+The default provider is \code{itis}, which can be reconfigured by setting
+\code{tl_default_provider} in \verb{[options]}.
+}
 \examples{
 
 ## example uses "itis_test" for illustration only:

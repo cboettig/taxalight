@@ -1,4 +1,7 @@
 
+## make contentid & jsonlite optional and otherwise cache a copy of the current prov table?
+## Would need to fall back on download.file() then
+
 
 #' @importFrom contentid resolve
 tl_import <- function(provider = getOption("tl_default_provider", "itis"),
@@ -30,14 +33,24 @@ tl_import <- function(provider = getOption("tl_default_provider", "itis"),
 
 
 
+
 ## data-raw me?
 ## export me? 
 
-#' @importFrom jsonlite read_json toJSON fromJSON
+## Allow soft dependency
+## @importFrom jsonlite read_json toJSON fromJSON
+
 parse_prov <- function(url =  "https://raw.githubusercontent.com/boettiger-lab/taxadb-cache/master/prov.json"){
-  prov <- jsonlite::read_json(url)
-  graph <- jsonlite::toJSON(prov$`@graph`, auto_unbox = TRUE)
-  df <- jsonlite::fromJSON(graph, simplifyVector = TRUE)
+  
+  ## Meh, already imported by httr
+  read_json <- getExportedValue("jsonlite", "read_json")
+  toJSON <- getExportedValue("jsonlite", "toJSON")
+  fromJSON <- getExportedValue("jsonlite", "fromJSON")
+  
+  
+  prov <- read_json(url)
+  graph <- toJSON(prov$`@graph`, auto_unbox = TRUE)
+  df <- fromJSON(graph, simplifyVector = TRUE)
   
   outputs <- df[df$description == "output data",
                 c("id", "title", "wasGeneratedAtTime", "compressFormat")]

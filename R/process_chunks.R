@@ -7,7 +7,7 @@ process_chunks <- function(file,
                            encoding = "UTF-8",
                            ...){
   
-  con <- file(file)
+  con <- generic_connection(file, "rb", encoding = encoding)
   on.exit(close(con))
   
   header <- readLines(con, n = 1L, encoding = encoding, warn = FALSE)
