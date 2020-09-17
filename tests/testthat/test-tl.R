@@ -8,7 +8,7 @@ test_that("tl", {
   #' ## example uses "itis_test" provider for illustration only:
   x <- tl(sp, "itis_test")
   expect_is(x, "data.frame")
-  expect_gt(dim(x)[[1]], 2)  
+  expect_gt(dim(x)[[1]], 1)  
   
   x <- tl(id, "itis_test")
   expect_is(x, "data.frame")
