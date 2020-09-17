@@ -19,7 +19,7 @@ tl_import <- function(provider = getOption("tl_default_provider", "itis"),
   dict <- prov$id
   names(dict) <- prov$key
   
-  ids <- as.character(na.omit(dict[keys]))
+  ids <- as.character(na_omit(dict[keys]))
   
   ## This will resolve the content-based identifier for the data to an appropriate source,
   ## validate that the data matches the checksum given in the identifier, 
@@ -31,7 +31,7 @@ tl_import <- function(provider = getOption("tl_default_provider", "itis"),
 
 
 
-
+na_omit <- function(x) x[!is.na(x)]
 
 
 ## data-raw me?

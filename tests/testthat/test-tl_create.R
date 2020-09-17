@@ -12,5 +12,5 @@ test_that("tl_import", {
 test_that("tl_create", {
   
   db <- tl_create("itis_test")
-  
+  expect_is(db, "mdb_env")
 })

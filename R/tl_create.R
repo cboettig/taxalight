@@ -6,6 +6,7 @@
 #' data is a time-consuming step that needs be run only once per
 #' machine and will persist through sessions.
 #' @inheritParams tl
+#' @param lines number of lines to read in each chunk. 
 #' @inherit tl details
 #' @export
 #' @examples
@@ -17,7 +18,7 @@
 tl_create <- function(provider = getOption("tl_default_provider", "itis"),
                       version = tl_latest_version(),
                       dir =  tl_dir(),
-                      lines = 5e5L){
+                      lines = 1e5L){
   
   schema <- "dwc" ## importer does not handle common names table yet
   db <- lmdb_init(lmdb_path(provider, version, dir))
@@ -69,8 +70,9 @@ lmdb_path <- function(provider =  getOption("tl_default_provider", "itis"),
   file.path(dir, provider, version)
 }
 
+#' @importFrom rappdirs user_data_dir
 tl_dir <- function() {
-  user_data_dir("taxalight") 
+  rappdirs::user_data_dir("taxalight") 
 }
 
 dwc_columns <- function() {

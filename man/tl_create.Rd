@@ -8,7 +8,7 @@ tl_create(
   provider = getOption("tl_default_provider", "itis"),
   version = tl_latest_version(),
   dir = tl_dir(),
-  lines = 500000L
+  lines = 100000L
 )
 }
 \arguments{
@@ -20,6 +20,8 @@ use \code{"itis"} for the full ITIS data.  See details}
 \item{version}{version of the authority to use (e.g. four-digit year)}
 
 \item{dir}{storage location for the LMDB databases}
+
+\item{lines}{number of lines to read in each chunk.}
 }
 \description{
 Download raw data and store in a local LMDB database.  Importing

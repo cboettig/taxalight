@@ -17,6 +17,7 @@ ByteCompile: true
 Depends: R (>= 2.10)
 Imports:
     thor,
+    rappdirs,
     contentid
 Suggests:
     jsonlite,

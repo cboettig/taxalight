@@ -48,7 +48,7 @@ read_chunked <- function(con, n, encoding) {
 }
 
 
-
+#' @importFrom utils read.table
 stream_table <- function(file, 
                          sep = "\t", 
                          quote = "", 
