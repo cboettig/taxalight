@@ -12,11 +12,11 @@ test_that("tl", {
   
   x <- tl(id, "itis_test")
   expect_is(x, "data.frame")
-  expect_gt(dim(x)[[1]], 2)  
+  expect_gt(dim(x)[[1]], 1)  
   
   x <- tl(c(sp, id), "itis_test")
   expect_is(x, "data.frame")
-  expect_gt(dim(x)[[1]], 2)  
+  expect_gt(dim(x)[[1]], 1)  
   
   
 })

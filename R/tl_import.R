@@ -3,10 +3,25 @@
 ## Would need to fall back on download.file() then
 
 
+#' Import taxonomic database tables
+#' 
+#' Downloads the requested taxonomic data tables and return a local path
+#' to the data in `tsv.gz` format.  Downloads are cached and identified by
+#' content hash so that `tl_import` will not attempt to download the
+#' same file multiple times.
+#' `tl_import` parses a PROV record to determine the correct version to download.
+#' If offline, `tl_import` will attempt to resolve against it's own cache.
+#' @inheritParams tl
+#' @param schema schema to import from
+#' @param prov Address (URL) to provenance record
+#' 
+#' @export
 #' @importFrom contentid resolve
 tl_import <- function(provider = getOption("tl_default_provider", "itis"),
                       schema = c("dwc", "common"),
-                      version = tl_latest_version()){
+                      version = tl_latest_version(),
+                      prov = paste0("https://raw.githubusercontent.com/",
+                                  "boettiger-lab/taxadb-cache/master/prov.json")){
   
   ## For unit tests / examples only
   if(provider == "itis_test")
@@ -15,7 +30,7 @@ tl_import <- function(provider = getOption("tl_default_provider", "itis"),
   
   keys <- unlist(lapply(schema, paste, provider, version, sep="-"))
   
-  prov <- parse_prov()
+  prov <- parse_prov(prov)
   dict <- prov$id
   names(dict) <- prov$key
   
@@ -40,25 +55,32 @@ na_omit <- function(x) x[!is.na(x)]
 ## Allow soft dependency
 ## @importFrom jsonlite read_json toJSON fromJSON
 
-parse_prov <- function(url =  "https://raw.githubusercontent.com/boettiger-lab/taxadb-cache/master/prov.json"){
+parse_prov <- function(url =  
+    paste0("https://raw.githubusercontent.com/",
+           "boettiger-lab/taxadb-cache/master/prov.json")){
   
   ## Meh, already imported by httr
   read_json <- getExportedValue("jsonlite", "read_json")
   toJSON <- getExportedValue("jsonlite", "toJSON")
   fromJSON <- getExportedValue("jsonlite", "fromJSON")
   
+  cache <- system.file("extdata", "prov.json", package = "taxalight")
   
-  prov <- read_json(url)
+  prov <- tryCatch(read_json(url),
+                   error = function(e) read_json(cache),
+                   finally = read_json(cache)
+  )
   graph <- toJSON(prov$`@graph`, auto_unbox = TRUE)
   df <- fromJSON(graph, simplifyVector = TRUE)
   
   outputs <- df[df$description == "output data",
                 c("id", "title", "wasGeneratedAtTime", "compressFormat")]
   
-  
-  outputs$wasGeneratedAtTime <- as.POSIXct(outputs$wasGeneratedAtTime)
+  tmp <- vapply(outputs$wasGeneratedAtTime, `[[`, "", 1)
+  outputs$wasGeneratedAtTime <- as.Date(tmp)
   outputs$version <- format(outputs$wasGeneratedAtTime, "%Y")
   outputs$key <- gsub("\\.tsv\\.gz", "", outputs$title)
+  outputs$key <- gsub("\\.tsv\\.bz2", "", outputs$title)
   outputs$key <- gsub("_", "-", outputs$key)
   outputs$key <- paste(outputs$key, outputs$version, sep="-")
   outputs

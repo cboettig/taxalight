@@ -54,12 +54,20 @@ lmdb_importer <- function(df, db){
   ids <- tapply(txt, df1$acceptedNameUsageID, paste, collapse="\n")
   db$mput(key = names(ids), value = ids)
   
-  ## Now write scientificName as the key.
+  ## Now write scientificName as a key.
   sci <- tapply(txt, df1$scientificName, paste, collapse="\n")
   db$mput(key = names(sci), value = sci)
   
-  ## key on vernacular name?
-  
+  ## Write taxonID for any synonyms (should be unique)
+  syn_ids <- !is.na(df1$taxonID) | (df1$taxonID != df1$acceptedNameUsageID)
+  db$mput(key = df1$taxonID[syn_ids], value = txt[syn_ids])
+
+  ## Lastly, write vernacularName as a key. Omit NAs
+  has_common <- !is.na(df1$vernacularName)
+  common <- tapply(txt[has_common], df1$vernacularName[has_common],
+                   paste, collapse="\n")
+  db$mput(key = names(common), value = common)
+
   invisible(db)
 }
 
