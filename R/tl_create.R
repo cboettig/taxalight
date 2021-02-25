@@ -62,12 +62,13 @@ lmdb_importer <- function(df, db){
   syn_ids <- !is.na(df1$taxonID) | (df1$taxonID != df1$acceptedNameUsageID)
   db$mput(key = df1$taxonID[syn_ids], value = txt[syn_ids])
 
-  ## Lastly, write vernacularName as a key. Omit NAs
+  ## Lastly, write vernacularName as a key. POSSIBLY VERY SILLY!
   has_common <- !is.na(df1$vernacularName)
-  common <- tapply(txt[has_common], df1$vernacularName[has_common],
-                   paste, collapse="\n")
-  db$mput(key = names(common), value = common)
-
+  if(any(has_common)){
+    common <- tapply(txt[has_common], df1$vernacularName[has_common],
+                     paste, collapse="\n")
+    db$mput(key = names(common), value = common)
+  }
   invisible(db)
 }
 
