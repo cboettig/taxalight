@@ -73,8 +73,8 @@ get_ids <- function(name,
 ){
   
   df <- tl(name, provider, version, dir)
-  df$acceptedNameUsageID
-  
+  df[df$taxonomicStatus == "accepted", "acceptedNameUsageID"]
+
 }
 
 

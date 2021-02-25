@@ -26,19 +26,24 @@ lmdb_parse <- function(x, col.names, colClasses = NA){
                     nrows = 1)
   n <- length(tmp)
   ## consider a faster parser than read.table!
-  read.table(text = text,
-             header = FALSE, 
-             sep = "\t",
-             quote = "",  
-             colClasses = colClasses[1:n],
-             col.names = col.names[1:n])
+  df <- read.table(text = text,
+                   header = FALSE, 
+                   sep = "\t",
+                   quote = "",  
+                   colClasses = colClasses[1:n],
+                   col.names = col.names[1:n])
+  ## collapse any duplicates:
+  unique(df)
 }
 
 ## Txt is tab-collapsed table,   
 ## `txt = do.call(function(...) paste(..., sep="\t"), df1)`
 lmdb_serialize <- function(db, txt, group_id){
+  
+  valid <- !is.na(group_id)
+  if(!any(valid)) return(NULL)
   ## Combine any rows sharing a match group_id to a "\n"-sep string
-  value <- tapply(txt, group_id, paste, collapse="\n")
+  value <- tapply(txt[valid], group_id[valid], paste, collapse="\n")
   key <- names(value)
   ## since we stream in chunks, some matches may be in db already
   ## we append these with \n as well.  

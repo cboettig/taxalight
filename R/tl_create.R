@@ -56,16 +56,17 @@ lmdb_importer <- function(df, db){
   ## all acceptedNameUsageIDs are taxonIDs, but in some DBs (ITIS) some taxonIDs are not accepted
   lmdb_serialize(db, txt, df1$taxonID)
 
-  ## Now write scientificName as a key. Note: not unique,
+  ## Also write scientificName as a key. Note: not unique,
   ## a name can be a synonym to multiple IDs, or both a syn and accepted name
-  ## Sci names probably need cleaning up first before this is useful...
-  lmdb_serialize(db, txt, df1$scientificName)
+  lmdb_serialize(db, txt, paste(df1$genus, df1$specificEpithet))
 
+  ## includes synonyms and non-synonyms
+  lmdb_serialize(db, txt, df1$scientificName)
+  
+  
   ## Lastly, write vernacularName as a key. POSSIBLY VERY SILLY!
-  has_common <- !is.na(df1$vernacularName)
-  if(any(has_common)){
-    lmdb_serialize(db, txt[has_common], df1$vernacularName[has_common])
-  }
+  lmdb_serialize(db, txt, df1$vernacularName)
+  
   invisible(db)
 }
 
