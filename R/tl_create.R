@@ -73,7 +73,6 @@ lmdb_importer <- function(df, db){
 
 
 
-#' @importFrom rappdirs user_data_dir
 tl_dir <- function() { 
   Sys.getenv("TAXALIGHT_HOME",
   tools::R_user_dir("taxalight"))
