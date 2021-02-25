@@ -41,6 +41,8 @@ tl_create <- function(provider = getOption("tl_default_provider", "itis"),
 ## easily be transformed back into a table
 
 
+
+
 lmdb_importer <- function(df, db){
 
   ## Enforce standard column selection & order
@@ -49,35 +51,26 @@ lmdb_importer <- function(df, db){
   ## collapse columns with `\t`.  Is there a faster way?
   txt = do.call(function(...) paste(..., sep="\t"), df1)
 
-  ## Write acceptedNameUsageID key (may not be unique due to synonyms)
-  ## collapse groups  with `\n`.  base R, bitches
-  ids <- tapply(txt, df1$acceptedNameUsageID, paste, collapse="\n")
-  db$mput(key = names(ids), value = ids)
-  
-  ## Now write scientificName as a key.
-  sci <- tapply(txt, df1$scientificName, paste, collapse="\n")
-  db$mput(key = names(sci), value = sci)
-  
-  ## Write taxonID for any synonyms (should be unique)
-  syn_ids <- !is.na(df1$taxonID) | (df1$taxonID != df1$acceptedNameUsageID)
-  db$mput(key = df1$taxonID[syn_ids], value = txt[syn_ids])
+  ## Write taxonID as a key.  Not unique in DBs that give IDs to synonyms (i.e. ITIS)
+  ## acceptedNameUsageID is not unique to any DB with synonyms: all synonyms share the same accepted ID
+  ## all acceptedNameUsageIDs are taxonIDs, but in some DBs (ITIS) some taxonIDs are not accepted
+  lmdb_serialize(db, txt, df1$taxonID)
+
+  ## Now write scientificName as a key. Note: not unique,
+  ## a name can be a synonym to multiple IDs, or both a syn and accepted name
+  ## Sci names probably need cleaning up first before this is useful...
+  lmdb_serialize(db, txt, df1$scientificName)
 
   ## Lastly, write vernacularName as a key. POSSIBLY VERY SILLY!
   has_common <- !is.na(df1$vernacularName)
   if(any(has_common)){
-    common <- tapply(txt[has_common], df1$vernacularName[has_common],
-                     paste, collapse="\n")
-    db$mput(key = names(common), value = common)
+    lmdb_serialize(db, txt[has_common], df1$vernacularName[has_common])
   }
   invisible(db)
 }
 
 
-lmdb_path <- function(provider =  getOption("tl_default_provider", "itis"),
-                      version = tl_latest_version(),
-                      dir = tl_dir() ){
-  file.path(dir, provider, version)
-}
+
 
 #' @importFrom rappdirs user_data_dir
 tl_dir <- function() { 
@@ -85,11 +78,12 @@ tl_dir <- function() {
   tools::R_user_dir("taxalight"))
 }
 
-dwc_columns <- function(available_names) {
-  
-  known <- c("taxonID", "scientificName", "acceptedNameUsageID",
-    "taxonomicStatus", "taxonRank", "kingdom", "phylum",
-    "class", "order", "family", "genus", "specificEpithet",
-    "infraspecificEpithet", "vernacularName")
+TAXALIGHT_COLUMNS <- c("taxonID", "scientificName", "acceptedNameUsageID",
+           "taxonomicStatus", "taxonRank", "kingdom", "phylum",
+           "class", "order", "family", "genus", "specificEpithet",
+           "infraspecificEpithet", "vernacularName")
+
+dwc_columns <- function(available_names = TAXALIGHT_COLUMNS) {
+  known <- TAXALIGHT_COLUMNS
   known[known %in% available_names]
 }

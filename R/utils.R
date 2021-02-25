@@ -34,6 +34,10 @@ generic_connection <- function(path, ...) {
 }
 
 
-
+na_omit <- function(x) x[!is.na(x)]
+null_to_empty <- function(x) {
+  x[vapply(x, is.null, logical(1))] <- ""
+  x
+}
 
 

@@ -44,7 +44,7 @@ tl_import <- function(provider = getOption("tl_default_provider", "itis"),
     return(testfile[keys])
   }
   
-  prov <- parse_prov(prov)
+  prov <- tl_provenance(prov)
   dict <- prov$id
   names(dict) <- prov$key
   
@@ -80,50 +80,15 @@ itis_test_data <-function(version = tl_latest_version()){
   testfile
 }
 
-na_omit <- function(x) x[!is.na(x)]
 
 
-## data-raw me?
-## export me?
 
-## Allow soft dependency
-## @importFrom jsonlite read_json toJSON fromJSON
-
-parse_prov <- function(url =
-                         paste0("https://raw.githubusercontent.com/",
-                                "boettiger-lab/taxadb-cache/master/prov.json")){
-  
-  ## Meh, already imported by httr
-  read_json <- getExportedValue("jsonlite", "read_json")
-  toJSON <- getExportedValue("jsonlite", "toJSON")
-  fromJSON <- getExportedValue("jsonlite", "fromJSON")
-  
-  cache <- system.file("extdata", "prov.json", package = "taxadb")
-  
-  prov <- tryCatch(read_json(url),
-                   error = function(e) read_json(cache),
-                   finally = read_json(cache)
-  )
-  graph <- toJSON(prov$`@graph`, auto_unbox = TRUE)
-  df <- fromJSON(graph, simplifyVector = TRUE)
-  
-  outputs <- df[df$description == "output data",
-                c("id", "title", "wasGeneratedAtTime", "compressFormat")]
-  
-  tmp <- vapply(outputs$wasGeneratedAtTime, `[[`, "", 1)
-  outputs$wasGeneratedAtTime <- as.Date(tmp)
-  outputs$version <- format(outputs$wasGeneratedAtTime, "%Y")
-  outputs$series <- gsub("\\.tsv\\.gz", "", outputs$title)
-  outputs$series <- gsub("\\.tsv\\.bz2", "", outputs$series)
-  outputs$key <- paste(outputs$version, outputs$series, sep="_")
-  outputs
-}
 
 
 tl_latest_version <-
   function(url = paste0("https://raw.githubusercontent.com/",
                         "boettiger-lab/taxadb-cache/master/prov.json")){
-    prov <- parse_prov(url)
+    prov <- tl_provenance(url)
     max(prov$version)
     
   }

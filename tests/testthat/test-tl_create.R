@@ -1,16 +1,16 @@
 context("tl_create")
 
-test_that("parse_prov()",{
+test_that("tl_provenance()",{
   skip_if_offline()
   skip_on_cran()
-  prov <- parse_prov()
+  prov <- tl_provenance()
   expect_is(prov, "data.frame")
   expect_gt(nrow(prov), 2)
 })
 
-test_that("parse_prov()",{
+test_that("offline tl_provenance()",{
   expect_warning({
-    prov <- parse_prov("not_a_url")
+    prov <- tl_provenance("not_a_url")
   })
   expect_is(prov, "data.frame")
   expect_gt(nrow(prov), 2)
