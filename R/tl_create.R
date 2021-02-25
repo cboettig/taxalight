@@ -44,7 +44,7 @@ tl_create <- function(provider = getOption("tl_default_provider", "itis"),
 lmdb_importer <- function(df, db){
 
   ## Enforce standard column selection & order
-  df1 <- df[dwc_columns()]
+  df1 <- df[dwc_columns(names(df))]
     
   ## collapse columns with `\t`.  Is there a faster way?
   txt = do.call(function(...) paste(..., sep="\t"), df1)
@@ -85,9 +85,11 @@ tl_dir <- function() {
   tools::R_user_dir("taxalight"))
 }
 
-dwc_columns <- function() {
-  c("taxonID", "scientificName", "acceptedNameUsageID",
+dwc_columns <- function(available_names) {
+  
+  known <- c("taxonID", "scientificName", "acceptedNameUsageID",
     "taxonomicStatus", "taxonRank", "kingdom", "phylum",
     "class", "order", "family", "genus", "specificEpithet",
     "infraspecificEpithet", "vernacularName")
+  known[known %in% available_names]
 }
