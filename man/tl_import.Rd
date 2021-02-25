@@ -24,11 +24,22 @@ use \code{"itis"} for the full ITIS data.  See details}
 
 \item{prov}{Address (URL) to provenance record}
 }
+\value{
+path(s) to the downloaded files in the cache
+}
 \description{
 Downloads the requested taxonomic data tables and return a local path
 to the data in \code{tsv.gz} format.  Downloads are cached and identified by
 content hash so that \code{tl_import} will not attempt to download the
 same file multiple times.
 \code{tl_import} parses a PROV record to determine the correct version to download.
-If offline, \code{tl_import} will attempt to resolve against it's own cache.
+If offline, \code{tl_import} will attempt to resolve against its own cached
+provenance record.
+}
+\details{
+\code{tl_import} parses a DCAT2/PROV-O record to determine the correct version
+to download. If offline, \code{tl_import} will attempt to resolve against
+it's own provenance cache. Users can also examine / parse the prov
+JSON-LD file directly to determine the provenance of the data products
+used.
 }

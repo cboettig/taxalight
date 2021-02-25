@@ -40,8 +40,9 @@ tl <- function(x,
                dir = tl_dir()){
 
   path <- lmdb_path(provider, version, dir)
-  if(!file.exists(path))
-    tl_import(provider = provider, schema = "dwc", version = version)
+  if(!file.exists(path)){
+    tl_create(provider = provider, version = version, dir = dir)
+  }
 
   db <- lmdb_init(path)
   

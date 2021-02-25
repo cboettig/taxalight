@@ -79,8 +79,9 @@ lmdb_path <- function(provider =  getOption("tl_default_provider", "itis"),
 }
 
 #' @importFrom rappdirs user_data_dir
-tl_dir <- function() {
-  rappdirs::user_data_dir("taxalight") 
+tl_dir <- function() { 
+  Sys.getenv("TAXALIGHT_HOME",
+  tools::R_user_dir("taxalight"))
 }
 
 dwc_columns <- function() {
