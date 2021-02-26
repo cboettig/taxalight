@@ -29,7 +29,7 @@ data is a time-consuming step that needs be run only once per
 machine and will persist through sessions.
 }
 \details{
-Naming providers currently recognized by taxald are:
+Naming providers currently recognized by \code{taxalight} are:
 \itemize{
 \item \code{itis}: Integrated Taxonomic Information System, \url{https://www.itis.gov/}
 \item \code{ncbi}:  National Center for Biotechnology Information,

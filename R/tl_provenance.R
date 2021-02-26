@@ -14,8 +14,8 @@
 #' like a DOI. 
 #' 
 #' @param url The location of the most recent provenance record.  Leave as default.
-#' @return A data frame summarizing the avaialble processed data, along with
-#' identifiers that can be resolved by contentid. 
+#' @return A data frame summarizing the available processed data, along with
+#' identifiers that can be resolved by [contentid::resolve()]. 
 #' @export
 tl_provenance <- function(url =
                             paste0("https://raw.githubusercontent.com/",

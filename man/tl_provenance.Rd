@@ -13,8 +13,8 @@ tl_provenance(
 \item{url}{The location of the most recent provenance record.  Leave as default.}
 }
 \value{
-A data frame summarizing the avaialble processed data, along with
-identifiers that can be resolved by contentid.
+A data frame summarizing the available processed data, along with
+identifiers that can be resolved by \code{\link[contentid:resolve]{contentid::resolve()}}.
 }
 \description{
 \code{tl_provenance} parses a JSON-LD file describing the data provenance between

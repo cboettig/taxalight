@@ -32,7 +32,7 @@ acceptedNameUsageID or scientificName requested.
 taxalight query: rapidly look up scientific names from a local database
 }
 \details{
-Naming providers currently recognized by taxald are:
+Naming providers currently recognized by \code{taxalight} are:
 \itemize{
 \item \code{itis}: Integrated Taxonomic Information System, \url{https://www.itis.gov/}
 \item \code{ncbi}:  National Center for Biotechnology Information,

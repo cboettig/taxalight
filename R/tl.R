@@ -10,7 +10,7 @@
 #' @param version version of the authority to use (e.g. four-digit year)
 #' @param dir storage location for the LMDB databases
 #' @details 
-#'  Naming providers currently recognized by taxald are:
+#'  Naming providers currently recognized by `taxalight` are:
 #'  - `itis`: Integrated Taxonomic Information System, <https://www.itis.gov/>
 #'  - `ncbi`:  National Center for Biotechnology Information,
 #'  <https://www.ncbi.nlm.nih.gov/taxonomy>
