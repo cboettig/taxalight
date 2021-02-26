@@ -14,9 +14,7 @@ test_that("handles duplicate names", {
   skip_if(TRUE, "takes a long time")
 
   df <- tl("Muscicapa striata", "ott")
-  
-  bench::bench_time({
-    x <- get_ids("Muscicapa striata", "ott")
-  })  
+  x <- get_ids("Muscicapa striata", "ott")
+
   expect_gt(nrow(df), 1)  
 })
