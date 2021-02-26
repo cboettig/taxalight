@@ -46,7 +46,9 @@ The default provider is \code{itis}, which can be reconfigured by setting
 \examples{
 
 ## example uses "itis_test" for illustration only:
-tl_create("itis_test")
 
+\dontshow{Sys.setenv(TAXALIGHT_HOME=tempfile())}
+tl_create("itis_test")
+\dontshow{Sys.unsetenv("TAXALIGHT_HOME")}
 
 }

@@ -12,8 +12,10 @@
 #' @examples
 #' 
 #' ## example uses "itis_test" for illustration only:
-#' tl_create("itis_test")
 #' 
+#' \dontshow{Sys.setenv(TAXALIGHT_HOME=tempfile())}
+#' tl_create("itis_test")
+#' \dontshow{Sys.unsetenv("TAXALIGHT_HOME")}
 #' 
 tl_create <- function(provider = getOption("tl_default_provider", "itis"),
                       version = tl_latest_version(),

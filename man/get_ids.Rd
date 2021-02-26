@@ -33,6 +33,12 @@ will return the accepted name and not the synonym name.
 Return the accepted taxonomic identifier, \code{acceptedNameUsageID} given a scientific name
 }
 \examples{
+
+\dontshow{Sys.setenv(TAXALIGHT_HOME=tempfile())}
+
 sp <- c("Dendrocygna autumnalis", "Dendrocygna bicolor")
 get_ids(sp) 
+
+\dontshow{Sys.unsetenv("TAXALIGHT_HOME")}
+
 }

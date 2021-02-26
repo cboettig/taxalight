@@ -54,8 +54,6 @@ lmdb_serialize <- function(db, txt, group_id){
 lmdb_path <- function(provider =  getOption("tl_default_provider", "itis"),
                       version = tl_latest_version(),
                       dir = tl_dir() ){
-  if(provider == "itis_test") 
-    return(system.file("extdata", "itis_test", version, package = "taxalight"))
   file.path(dir, provider, version)
 }
 

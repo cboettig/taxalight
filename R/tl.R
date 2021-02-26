@@ -28,12 +28,20 @@
 #' @seealso [tl_create]
 #' 
 #' @examples
+#' 
+#' \dontshow{Sys.setenv(TAXALIGHT_HOME=tempfile())}
+#' 
+#' \donntest{ # slow initial import
 #' sp <- c("Dendrocygna autumnalis", "Dendrocygna bicolor")
 #' id <- c("ITIS:180092", "ITIS:179913")
 #' 
 #' ## example uses "itis_test" provider for illustration only:
 #' tl(sp, "itis_test")
 #' tl(id, "itis_test")
+#'
+#' }
+#' \dontshow{Sys.unsetenv("TAXALIGHT_HOME")}
+#'
 tl <- function(x,
                provider = getOption("tl_default_provider", "itis"),
                version = tl_latest_version(),
@@ -64,8 +72,16 @@ tl <- function(x,
 #' 
 #' @export
 #' @examples
+#' 
+#' \dontshow{Sys.setenv(TAXALIGHT_HOME=tempfile())}
+#' 
+#' \donttest{ # slow initial import
 #' sp <- c("Dendrocygna autumnalis", "Dendrocygna bicolor")
 #' get_ids(sp) 
+#' }
+#' 
+#' \dontshow{Sys.unsetenv("TAXALIGHT_HOME")}
+#' 
 get_ids <- function(name,
                    provider = getOption("tl_default_provider", "itis"),
                    version = tl_latest_version(),
@@ -87,7 +103,11 @@ get_ids <- function(name,
 #' 
 #' @export
 #' @examples
+#' \dontshow{Sys.setenv(TAXALIGHT_HOME=tempfile())}
+#' \donttest{ # slow initial import
 #' get_names(c("ITIS:180092", "ITIS:179913"))
+#' }
+#' \dontshow{Sys.unsetenv("TAXALIGHT_HOME")}
 #' 
 get_names <- function(id,
                    provider = getOption("tl_default_provider", "itis"),

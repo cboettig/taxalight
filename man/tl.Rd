@@ -47,12 +47,18 @@ The default provider is \code{itis}, which can be reconfigured by setting
 \code{tl_default_provider} in \verb{[options]}.
 }
 \examples{
+
+\dontshow{Sys.setenv(TAXALIGHT_HOME=tempfile())}
+
 sp <- c("Dendrocygna autumnalis", "Dendrocygna bicolor")
 id <- c("ITIS:180092", "ITIS:179913")
 
 ## example uses "itis_test" provider for illustration only:
 tl(sp, "itis_test")
 tl(id, "itis_test")
+
+\dontshow{Sys.unsetenv("TAXALIGHT_HOME")}
+
 }
 \seealso{
 \link{tl_create}
