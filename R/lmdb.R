@@ -1,10 +1,6 @@
 
 #' @importFrom thor mdb_env
 lmdb_init <- function(path) {
-  #if (!requireNamespace("thor", quietly = TRUE)){
-  #  stop("Please install package `thor` to use LMDB backend")
-  #}
-  #mdb_env <- getExportedValue("thor", "mdb_env")
   thor::mdb_env(path, mapsize = mapsize()) ## ~1 TB
 }
 
@@ -58,6 +54,8 @@ lmdb_serialize <- function(db, txt, group_id){
 lmdb_path <- function(provider =  getOption("tl_default_provider", "itis"),
                       version = tl_latest_version(),
                       dir = tl_dir() ){
+  if(provider == "itis_test") 
+    return(system.file("extdata", "itis_test", package = "taxalight"))
   file.path(dir, provider, version)
 }
 
