@@ -31,7 +31,9 @@ Return \code{scientificName} names given taxonomic identifiers
 }
 \examples{
 \dontshow{Sys.setenv(TAXALIGHT_HOME=tempfile())}
+\donttest{ # slow initial import
 get_names(c("ITIS:180092", "ITIS:179913"))
+}
 \dontshow{Sys.unsetenv("TAXALIGHT_HOME")}
 
 }

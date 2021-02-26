@@ -50,6 +50,7 @@ The default provider is \code{itis}, which can be reconfigured by setting
 
 \dontshow{Sys.setenv(TAXALIGHT_HOME=tempfile())}
 
+\donttest{ # slow initial import
 sp <- c("Dendrocygna autumnalis", "Dendrocygna bicolor")
 id <- c("ITIS:180092", "ITIS:179913")
 
@@ -57,6 +58,7 @@ id <- c("ITIS:180092", "ITIS:179913")
 tl(sp, "itis_test")
 tl(id, "itis_test")
 
+}
 \dontshow{Sys.unsetenv("TAXALIGHT_HOME")}
 
 }

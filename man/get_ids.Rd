@@ -36,8 +36,10 @@ Return the accepted taxonomic identifier, \code{acceptedNameUsageID} given a sci
 
 \dontshow{Sys.setenv(TAXALIGHT_HOME=tempfile())}
 
+\donttest{ # slow initial import
 sp <- c("Dendrocygna autumnalis", "Dendrocygna bicolor")
 get_ids(sp) 
+}
 
 \dontshow{Sys.unsetenv("TAXALIGHT_HOME")}
 

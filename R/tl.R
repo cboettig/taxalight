@@ -31,7 +31,7 @@
 #' 
 #' \dontshow{Sys.setenv(TAXALIGHT_HOME=tempfile())}
 #' 
-#' \donntest{ # slow initial import
+#' \donttest{ # slow initial import
 #' sp <- c("Dendrocygna autumnalis", "Dendrocygna bicolor")
 #' id <- c("ITIS:180092", "ITIS:179913")
 #' 
