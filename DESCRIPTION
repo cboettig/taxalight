@@ -1,5 +1,5 @@
 Package: taxalight
-Version: 0.1.0
+Version: 0.1.1
 Title: A Lightweight and Lightning-fast taxonomic naming interface
 Description: Creates a local Lightning Memory-Mapped Database (LMDB) 
              of many commonly used taxonomic authorities
