@@ -40,4 +40,3 @@ BugReports: https://github.com/cboettig/taxalight
 Language: en-US
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
-VignetteBuilder: knitr
