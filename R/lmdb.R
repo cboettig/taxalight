@@ -14,6 +14,7 @@ lmdb_read <- function(db, id, ...) {
 
 ## parse text string back into a data.frame
 lmdb_parse <- function(x, col.names, colClasses = NA){
+  if(all(x %in% "")) return(data.frame())
   text <- paste0(x, collapse="\n")
   tmp <- read.table(text = text, 
                     header = FALSE, 

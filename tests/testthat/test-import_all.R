@@ -15,6 +15,12 @@ test_that("handles duplicate names", {
 
   df <- tl("Muscicapa striata", "ott")
   x <- get_ids("Muscicapa striata", "ott")
-
   expect_gt(nrow(df), 1)  
+  
+  
+  
+  df <- tl("Muscicapa striata", "gbif")
+  df <- tl("Muscicapa striata", "itis")
+  df <- tl("Muscicapa striata", "col")
+  
 })

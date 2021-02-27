@@ -34,7 +34,8 @@ Suggests:
     covr,
     knitr,
     rmarkdown,
-    progress
+    progress,
+    utf8
 URL: https://github.com/cboettig/taxalight
 BugReports: https://github.com/cboettig/taxalight
 Language: en-US

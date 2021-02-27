@@ -47,18 +47,20 @@ library(taxalight)
 tl_create("itis")
 ```
 
-Now we can look up species by names, IDs, or both at once:
+Now we can look up species by names, IDs, or a mix.  Even vernacular names can be recognized as key.  Note that only exact matches are supported though! ITIS (`itis`) is the default provider, but GBIF, COL, OTT, and NCBI are also available. 
 
 ```{r}
-tl("Homo sapiens")
+tl("Homo sapiens", provider = "itis")
 ```
+
 ```{r}
-id <- c("ITIS:180092", "ITIS:179913", "Dendrocygna autumnalis")
+id <- c("ITIS:180092", "ITIS:179913", "Dendrocygna autumnalis", "Snow Goose",
+        provider = "itis")
 tl(id)
 ```
 
 
-For convenience, we can request just the name or id as a character vector (paralleling functionality in `taxize`):
+For convenience, we can request just the name or id as a character vector (paralleling functionality in `taxize`).  If the name is recognized as an accepted name, the corresponding ID for the provider is returned.  
 
 
 ```{r}
@@ -74,50 +76,50 @@ get_names("ITIS:179913")
 
 ```{r}
 library(bench)
-
-```
-
-
-```{r}
-tl_create("col")
 ```
 
 ```{r}
-duckdb <- DBI::dbConnect(duckdb::duckdb(), dbdir = tempfile())
-taxadb::td_create("col", schema="dwc", db = duckdb)
+sp <- c("Dendrocygna autumnalis", "Dendrocygna bicolor",
+        "Chen canagica",          "Chen caerulescens"     )
 ```
 
-
-
-
 ```{r}
-rsqlite <- DBI::dbConnect(RSQLite::SQLite(), dbdir = tempfile())
-taxadb::td_create("col", schema="dwc", db = rsqlite) 
-```
-```{r}
-ids <- c("COL:35517330", "COL:35517332", "COL:35517329", "COL:35517325")
-bench::bench_time(
-  
-  taxadb::filter_id(ids, "col", db = rsqlite)
-  
-)
+taxadb::td_create("itis", schema="dwc")
 ```
 
 
 ```{r}
 bench::bench_time(
-  
-  taxadb::filter_id(ids, "col", db = duckdb)
-  
+  df_tb <- taxadb::filter_name(sp, "itis")
 )
+df_tb
 ```
+
+
 
 ```{r}
 bench::bench_time(
-  
-  taxalight::tl(ids, "col")
-  
+  df_tl <- taxalight::tl(sp, "itis")
 )
+df_tl
+```
+
+
+
+```{r}
+bench::bench_time(
+  id_tb <- taxadb::get_ids(sp, "itis")
+)
+id_tb
+```
+
+
+
+```{r}
+bench::bench_time(
+  id_tl <- taxalight::get_ids(sp, "itis")
+)
+id_tl
 ```
 
 ## A provenance-backed data import
@@ -130,6 +132,8 @@ Under the hood, `taxalight` consumes a [DCAT2/PROV-O based description](https://
 
 Input data and scripts for transforming the data into the desired format are similarly archived and referenced by content identifiers in the provenance trace.  
 
-
+```{r}
+tl_provenance()
+```
 
 
