@@ -8,7 +8,7 @@
 [![R build
 status](https://github.com/cboettig/taxalight/workflows/R-CMD-check/badge.svg)](https://github.com/cboettig/taxalight/actions)
 [![CRAN
-status](https://www.r-pkg.org/badges/version/taxalight)](https://CRAN.R-project.org/package=taxalight)
+status](https://www.r-pkg.org/badges/version/taxalight)](https://CRAN.R-project.org/)
 <!-- badges: end -->
 
 `taxalight` provides a lightweight, lightning fast query for resolving
