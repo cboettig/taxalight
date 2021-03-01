@@ -26,7 +26,7 @@ test_that("get_ids", {
   
   sp <- c("Dendrocygna autumnalis", "Dendrocygna bicolor")
   x <- get_ids(sp, "itis_test")
-  expect_identical(x, c("ITIS:175044", "ITIS:175046"))
+  expect_identical(unname(x), c("ITIS:175044", "ITIS:175046"))
 })
 
 
