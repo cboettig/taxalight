@@ -91,21 +91,28 @@ get_ids <- function(name,
   ## tl resolver
   df <- tl(name, provider, version, dir)
   
-  # Unambiguous single resolution!
-  if(nrow(df)==1) return(df[, "acceptedNameUsageID"])
-  
-  ## Drop infraspecies when not perfect match
-  df <- df[is.na(df$infraspecificEpithet),]
-  if(nrow(df)==1) return(df[, "acceptedNameUsageID"])
-  
-  ## Multiple matches, but one name is accepted
-  ## Note: could still be a synonym. some names are both
-  if(any(grepl("accepted", df$taxonomicStatus))){
-    return(df[df$taxonomicStatus == "accepted", "acceptedNameUsageID"])
-  }
+  vapply(name, function(x){
+    df <- df[df$scientificName == x, ]
+    
+    # Unambiguous: one acceptedNameUsageID per name
+    if(nrow(df)==1) return(df[, "acceptedNameUsageID"])
+      
+    ## Drop infraspecies when not perfect match
+    df <- df[is.na(df$infraspecificEpithet),]
+    if(nrow(df)==1) return(df[, "acceptedNameUsageID"])
+    
+    ## Multiple matches, but one name is accepted
+    ## Note: could still be a synonym. some names are both
+    if(any(grepl("accepted", df$taxonomicStatus))){
+      return(df[df$taxonomicStatus == "accepted", "acceptedNameUsageID"])
+    }
 
-  ## Ambiguous synonym
-  NA_character_
+    ## Ambiguous synonym
+    warning(paste(nrow(df), "possible matches found for", name,
+                  "returning NA. try tl() to resolve manually."))
+    NA_character_
+  },
+  character(1L))
 }
 
 

@@ -61,7 +61,7 @@ lmdb_path <- function(provider =  getOption("tl_default_provider", "itis"),
 ## Windows throws errors on larger maps?
 mapsize <- function(){
   if (.Platform$OS.type == "windows") {
-    return(1e9)
+    return(9e9)
   }
   1e12
 }
