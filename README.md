@@ -8,7 +8,7 @@
 [![R build
 status](https://github.com/cboettig/taxalight/workflows/R-CMD-check/badge.svg)](https://github.com/cboettig/taxalight/actions)
 [![CRAN
-status](https://www.r-pkg.org/badges/version/taxalight)](https://CRAN.R-project.org/)
+status](https://www.r-pkg.org/badges/version/taxalight)](https://CRAN.R-project.org/package=taxalight)
 <!-- badges: end -->
 
 `taxalight` provides a lightweight, lightning fast query for resolving
@@ -44,7 +44,7 @@ tl_create("itis")
 
 Now we can look up species by names, IDs, or a mix. Even vernacular
 names can be recognized as key. Note that only exact matches are
-supported though! ITIS (`itis`) is the default provider, but GBIF, COL,
+supported though\! ITIS (`itis`) is the default provider, but GBIF, COL,
 OTT, and NCBI are also available.
 
 ``` r
@@ -178,7 +178,6 @@ returned.
 
 ``` r
 get_ids("Homo sapiens")
-#> [1] "ITIS:180092"
 ```
 
 ``` r
@@ -207,9 +206,8 @@ taxadb::td_create("itis", schema="dwc")
 #>   print.date_names vroom
 #>   print.locale     vroom
 #>   str.col_spec     vroom
-#> Warning in overwrite_db(con, tablename): overwriting 2020_dwc_itis
-#> Importing /home/cboettig/.local/share/R/contentid/data/ef/6a/ef6ae3b337be65c661d5e2d847613ebc955bb9d91d2d98d03cf8c53029cecc2a in 100000 line chunks:
-#>  ...Done! (in 14.73625 secs)
+#> Importing /home/cboettig/.local/share/R/contentid/sha256/ef/6a/ef6ae3b337be65c661d5e2d847613ebc955bb9d91d2d98d03cf8c53029cecc2a in 100000 line chunks:
+#>  ...Done! (in 13.0536 secs)
 ```
 
 ``` r
@@ -217,7 +215,7 @@ bench::bench_time(
   df_tb <- taxadb::filter_name(sp, "itis")
 )
 #> process    real 
-#>   4.83s   4.85s
+#>   3.91s   3.93s
 df_tb
 #> # A tibble: 4 x 17
 #>    sort taxonID   scientificName     taxonRank acceptedNameUsag… taxonomicStatus
@@ -236,7 +234,7 @@ bench::bench_time(
   df_tl <- taxalight::tl(sp, "itis")
 )
 #> process    real 
-#>  30.8ms 146.9ms
+#>  29.3ms  44.4ms
 df_tl
 #>        taxonID            scientificName acceptedNameUsageID taxonomicStatus
 #> 1  ITIS:175044    Dendrocygna autumnalis         ITIS:175044        accepted
@@ -275,7 +273,7 @@ bench::bench_time(
   id_tb <- taxadb::get_ids(sp, "itis")
 )
 #> process    real 
-#>    2.7s   2.72s
+#>   2.19s   2.21s
 id_tb
 #> [1] "ITIS:175044" "ITIS:175046" "ITIS:175042" "ITIS:175038"
 ```
@@ -285,9 +283,12 @@ bench::bench_time(
   id_tl <- taxalight::get_ids(sp, "itis")
 )
 #> process    real 
-#>  31.4ms  44.7ms
+#>  25.6ms    38ms
 id_tl
-#> [1] "ITIS:175044" "ITIS:175046" "ITIS:175042" "ITIS:175038"
+#> Dendrocygna autumnalis    Dendrocygna bicolor          Chen canagica 
+#>          "ITIS:175044"          "ITIS:175046"          "ITIS:175042" 
+#>      Chen caerulescens 
+#>          "ITIS:175038"
 ```
 
 ## A provenance-backed data import
