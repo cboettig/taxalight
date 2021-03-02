@@ -91,30 +91,44 @@ get_ids <- function(name,
   ## tl resolver
   df <- tl(name, provider, version, dir)
   
-  vapply(name, function(x){
+  set <- vapply(name, function(x){
     df <- df[df$scientificName == x, ]
+    
+    if(nrow(df) < 1) return(NA_character_)
     
     # Unambiguous: one acceptedNameUsageID per name
     if(nrow(df)==1) return(df[, "acceptedNameUsageID"])
       
     ## Drop infraspecies when not perfect match
     df <- df[is.na(df$infraspecificEpithet),]
-    if(nrow(df)==1) return(df[, "acceptedNameUsageID"])
     
-    ## Multiple matches, but one name is accepted
-    ## Note: could still be a synonym. some names are both
-    if(any(grepl("accepted", df$taxonomicStatus))){
-      return(df[df$taxonomicStatus == "accepted", "acceptedNameUsageID"])
+    ## If we resolve to a unique accepted ID, return that
+    ids <- unique(df$acceptedNameUsageID)
+    if(length(ids)==1){ 
+      return(ids)
+    } else {
+      warning(paste0("  Found ", bb(length(ids)), " possible identifiers for ", 
+                     ibr(x),
+                     ".\n  Returning ", bb('NA'), ". Try ",
+                     bb(paste0("tl('", x, "', '", provider,"')")),
+                     " to resolve manually.\n"),
+              call. = FALSE)
+      return(NA_character_)
     }
-
-    ## Ambiguous synonym
-    warning(paste(nrow(df), "possible matches found for", name,
-                  "returning NA. try tl() to resolve manually."))
-    NA_character_
-  },
-  character(1L))
+    "DUPLICATE"
+    }, 
+    character(1L))
+    
 }
 
+ibr <- function(...){
+  if(!requireNamespace("crayon", quietly = TRUE)) return(paste(...))
+  crayon::italic(crayon::bold(crayon::red(...)))
+}
+bb <- function(...){
+  if(!requireNamespace("crayon", quietly = TRUE)) return(paste(...))
+  crayon::bold(crayon::blue(...))
+}
 
 #' Return `scientificName` names given taxonomic identifiers
 #' 
@@ -138,6 +152,9 @@ get_names <- function(id,
 ){
   
   df <- tl(id, provider, version, dir)
+  if(nrow(df) < 1) return(NA_character_)
+  
+  df <- df[df$taxonomicStatus == "accepted", ]
   df$scientificName
   
 }

@@ -35,7 +35,8 @@ Suggests:
     knitr,
     rmarkdown,
     progress,
-    utf8
+    utf8,
+    crayon
 URL: https://github.com/cboettig/taxalight
 BugReports: https://github.com/cboettig/taxalight
 Language: en-US
