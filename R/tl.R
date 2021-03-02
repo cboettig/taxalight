@@ -91,34 +91,32 @@ get_ids <- function(name,
   ## tl resolver
   df <- tl(name, provider, version, dir)
   
-  set <- vapply(name, function(x){
-    df <- df[df$scientificName == x, ]
-    
-    if(nrow(df) < 1) return(NA_character_)
-    
-    # Unambiguous: one acceptedNameUsageID per name
-    if(nrow(df)==1) return(df[, "acceptedNameUsageID"])
+  vapply(name, function(x){
+      df <- df[df$scientificName == x, ]
       
-    ## Drop infraspecies when not perfect match
-    df <- df[is.na(df$infraspecificEpithet),]
-    
-    ## If we resolve to a unique accepted ID, return that
-    ids <- unique(df$acceptedNameUsageID)
-    if(length(ids)==1){ 
-      return(ids)
-    } else {
-      warning(paste0("  Found ", bb(length(ids)), " possible identifiers for ", 
-                     ibr(x),
-                     ".\n  Returning ", bb('NA'), ". Try ",
-                     bb(paste0("tl('", x, "', '", provider,"')")),
-                     " to resolve manually.\n"),
-              call. = FALSE)
-      return(NA_character_)
+      if(nrow(df) < 1) return(NA_character_)
+      
+      # Unambiguous: one acceptedNameUsageID per name
+      if(nrow(df)==1) return(df[, "acceptedNameUsageID"])
+        
+      ## Drop infraspecies when not perfect match
+      df <- df[is.na(df$infraspecificEpithet),]
+      
+      ## If we resolve to a unique accepted ID, return that
+      ids <- unique(df$acceptedNameUsageID)
+      if(length(ids)==1){ 
+        return(ids)
+      } else {
+        warning(paste0("  Found ", bb(length(ids)), " possible identifiers for ", 
+                       ibr(x),
+                       ".\n  Returning ", bb('NA'), ". Try ",
+                       bb(paste0("tl('", x, "', '", provider,"')")),
+                       " to resolve manually.\n"),
+                call. = FALSE)
+        return(NA_character_)
     }
-    "DUPLICATE"
     }, 
     character(1L))
-    
 }
 
 ibr <- function(...){
