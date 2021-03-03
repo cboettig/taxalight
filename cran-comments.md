@@ -1,10 +1,10 @@
-## Test environments
-* local R installation, R 4.0.3
-* ubuntu 16.04 (on travis-ci), R 4.0.3
-* win-builder (devel)
+Dear CRAN Maintainers,
 
-## R CMD check results
+This release should address the issue observed on the Solaris platform used in CRAN checks,
+which does not support the initialization of larger LMDB databases that are supported
+on the more widely used Linux, Mac, and Windows platforms.  The Solaris patch as been
+confirmed to work successfully on r-hub Solaris test.
 
-0 errors | 0 warnings | 1 note
+Sincerely,
 
-* This is a new release.
+Carl
