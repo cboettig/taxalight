@@ -62,6 +62,8 @@ lmdb_path <- function(provider =  getOption("tl_default_provider", "itis"),
 mapsize <- function(){
   if (.Platform$OS.type == "windows") {
     return(9e9)
+  } else if (grepl("SunOS", Sys.info()["sysname"])){
+    return(NULL)
   }
   1e12
 }
