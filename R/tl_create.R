@@ -73,13 +73,6 @@ lmdb_importer <- function(df, db){
 }
 
 
-
-
-tl_dir <- function() { 
-  Sys.getenv("TAXALIGHT_HOME",
-  tools::R_user_dir("taxalight"))
-}
-
 TAXALIGHT_COLUMNS <- c("taxonID", "scientificName", "acceptedNameUsageID",
            "taxonomicStatus", "taxonRank", "kingdom", "phylum",
            "class", "order", "family", "genus", "specificEpithet",

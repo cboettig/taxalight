@@ -26,7 +26,7 @@
 #'
 #'
 #' @return path(s) to the downloaded files in the cache
-#' @export
+#' @noRd
 #' @importFrom contentid resolve
 tl_import <- function(provider = getOption("tl_default_provider", "itis"),
                       schema = "dwc",

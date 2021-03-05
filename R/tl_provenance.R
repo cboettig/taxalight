@@ -16,7 +16,7 @@
 #' @param url The location of the most recent provenance record.  Leave as default.
 #' @return A data frame summarizing the available processed data, along with
 #' identifiers that can be resolved by [contentid::resolve()]. 
-#' @export
+#' @noRd
 tl_provenance <- function(url =
                             paste0("https://raw.githubusercontent.com/",
                                    "boettiger-lab/taxadb-cache/master/prov.json"

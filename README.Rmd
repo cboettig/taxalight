@@ -1,5 +1,7 @@
 ---
-output: github_document
+output: 
+  github_document:
+    df_print: tibble
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -20,7 +22,9 @@ knitr::opts_chunk$set(
 [![CRAN status](https://www.r-pkg.org/badges/version/taxalight)](https://CRAN.R-project.org/package=taxalight)
 <!-- badges: end -->
 
-`taxalight` provides a lightweight, lightning fast query for resolving taxonomic identifiers to taxonomic names, and vice versa, by using a Lightning Memory Mapped Database backend.
+`taxalight` provides a lightweight, lightning fast query for resolving taxonomic identifiers to taxonomic names, and vice versa, by using a Lightning Memory Mapped Database backend. Compared to `taxadb`, it has few dependencies, fewer functions, and faster performance.  
+
+If you just need to resolve scientific names to identifiers and vice versa, `taxalight` is a fast and simple option.  `taxalight` currently supports names from Integrated Taxonomic Information System (ITIS),  National Center for Biotechnology Information (NCBI), Global Biodiversity Information Facility (GBIF), Catalogue of Life (COL), and Open Tree Taxonomy (OTT). Like `taxadb`, `taxalight` uses annual stable version snapshots from these providers and presents the naming data in the simple and consistent tabular format of the Darwin Core Standard.
 
 
 ## Installation
@@ -132,8 +136,5 @@ Under the hood, `taxalight` consumes a [DCAT2/PROV-O based description](https://
 
 Input data and scripts for transforming the data into the desired format are similarly archived and referenced by content identifiers in the provenance trace.  
 
-```{r}
-tl_provenance()
-```
 
 
