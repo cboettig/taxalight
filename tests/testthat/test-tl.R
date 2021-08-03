@@ -2,6 +2,8 @@ context("tl")
 
 test_that("tl", {
   
+  skip_on_cran()
+  
   sp <- c("Dendrocygna autumnalis", "Dendrocygna bicolor")
   id <- c("ITIS:180092", "ITIS:179913")
   #' 

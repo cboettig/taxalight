@@ -1,3 +1,8 @@
+# taxalight 0.1.4
+
+* CRAN reports `thor` fails to access LMDB database on Mac's M1 (arm-based)
+  architectures.  For now, skip testing on CRAN until issue is resolved in `thor`.
+
 # taxalight 0.1.3
 
 * patch for Solaris
