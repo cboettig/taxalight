@@ -1,3 +1,7 @@
+# taxalight 0.1.5
+
+* `get_ids` example in docs now uses "itis_test" data, not full ITIS
+
 # taxalight 0.1.4
 
 * CRAN reports `thor` fails to access LMDB database on Mac's M1 (arm-based)

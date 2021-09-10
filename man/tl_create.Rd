@@ -48,7 +48,12 @@ The default provider is \code{itis}, which can be reconfigured by setting
 ## example uses "itis_test" for illustration only:
 
 \dontshow{Sys.setenv(TAXALIGHT_HOME=tempfile())}
+
+\donttest{ # test may take > 5s
 tl_create("itis_test")
+}
+
+
 \dontshow{Sys.unsetenv("TAXALIGHT_HOME")}
 
 }

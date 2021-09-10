@@ -14,7 +14,12 @@
 #' ## example uses "itis_test" for illustration only:
 #' 
 #' \dontshow{Sys.setenv(TAXALIGHT_HOME=tempfile())}
+#' 
+#' \donttest{ # test may take > 5s
 #' tl_create("itis_test")
+#' }
+#' 
+#' 
 #' \dontshow{Sys.unsetenv("TAXALIGHT_HOME")}
 #' 
 tl_create <- function(provider = getOption("tl_default_provider", "itis"),
