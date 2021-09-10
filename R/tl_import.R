@@ -68,9 +68,24 @@ tl_import <- function(provider = getOption("tl_default_provider", "itis"),
   ## validate that the data matches the checksum given in the identifier,
   ## and cache a local copy.  If the a local copy already matches the checksum,
   ## this will avoid downloading at all
-  paths <- vapply(ids, contentid::resolve, "", store=TRUE)
+  paths <- vapply(ids, 
+                  contentid::resolve, 
+                  "",
+                  registries = tl_registries(),
+                  store=TRUE)
   names(paths) <- tablenames
   paths
+}
+
+
+# Modified slightly from the defaults of `contentid`
+# Uses only hash-archive-style registries and local registries for now,
+# since content is too large for software-heritage and not in a DOI-repo
+tl_registries <- function(){
+  c("https://hash-archive.org",
+    "https://hash-archive.carlboettiger.info",
+    contentid::content_dir(),
+    file.path(contentid::content_dir(), "registry.tsv"))
 }
 
 itis_test_data <-function(version = tl_latest_version()){
